@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  YOUR BECOMING — Quiz
+  FOLDER STRUCTURE:
+    index.html
+    Images/
+      background.jpg
+      discover.jpg | release.jpg | reclaim.jpg | become.jpg | transition.jpg
+    discover.mp3 | release.mp3 | reclaim.mp3 | become.mp3 | transition.mp3
+  BOOKING LINK: find BOOKING_LINK near the top of the script
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Becoming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest-deep: #2a3d1f;
+    --forest-mid:  #344d24;
+    --forest-card: rgba(38,54,27,0.88);
+    --olive:       #3d5a32;
+    --gold:        #c5a05f;
+    --gold-soft:   #dfc48a;
+    --gold-line:   rgba(197,160,95,0.3);
+    --clay:        #7a3128;
+    --ivory:       #f5f0e8;
+    --ivory-soft:  #ece4d6;
+    --text-muted:  rgba(245,240,232,0.65);
+    --shadow:      rgba(10,18,6,0.55);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--ivory);
+    min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 16px 70px;
+    line-height: 1.65;
+    position: relative;
+    background-color: #2a3d1f;
+  }
+  .bg { position: fixed; inset: 0; z-index: 0; background-size: cover; background-position: center 30%; }
+  .bg-overlay {
+    position: fixed; inset: 0; z-index: 1;
+    background: linear-gradient(160deg, rgba(30,45,18,0.50) 0%, rgba(38,54,24,0.42) 50%, rgba(22,36,14,0.55) 100%);
+  }
+  .stage { width: 100%; max-width: 640px; margin: 0 auto; position: relative; z-index: 2; }
+  .stage.wide { max-width: 1020px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--forest-card);
+    border: 1px solid var(--gold-line);
+    border-radius: 20px; padding: 48px 44px;
+    box-shadow: 0 0 0 1px rgba(197,160,95,0.08) inset, 0 24px 60px var(--shadow), 0 2px 0 rgba(197,160,95,0.15) inset;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .card::before { content:''; display:block; height:2px; width:60px; margin:0 auto 32px; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:2px; }
+  .card.result-card { padding: 44px 46px; }
+
+  /* ── TYPE ── */
+  .eyebrow { font-family:'Nunito',sans-serif; font-weight:400; letter-spacing:0.3em; text-transform:uppercase; font-size:0.68rem; color:var(--gold); text-align:center; }
+  .rule { width:48px; height:1px; margin:16px auto; background:linear-gradient(90deg,transparent,var(--gold),transparent); position:relative; }
+  .rule::after { content:"✦"; position:absolute; top:-9px; left:50%; transform:translateX(-50%); color:var(--gold); font-size:0.75rem; }
+  h1.display { font-family:'Cormorant Garamond',serif; font-weight:500; line-height:1.1; text-align:center; color:var(--ivory); font-size:2.8rem; }
+  .sub { text-align:center; color:var(--text-muted); font-weight:300; font-size:0.98rem; max-width:460px; margin:0 auto; }
+
+  /* ── BUTTON ── */
+  .btn { display:inline-block; font-family:'Nunito',sans-serif; font-weight:600; letter-spacing:0.04em; font-size:0.96rem; color:var(--forest-deep); background:linear-gradient(135deg,var(--gold-soft),var(--gold)); border:none; border-radius:40px; padding:15px 40px; cursor:pointer; transition:transform 0.15s ease,box-shadow 0.15s ease; box-shadow:0 8px 24px rgba(197,160,95,0.3); }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 14px 30px rgba(197,160,95,0.42); }
+  .btn-ghost { background:transparent; color:var(--text-muted); border:1px solid rgba(197,160,95,0.3); box-shadow:none; }
+  .btn-ghost:hover { color:var(--ivory); border-color:var(--gold); box-shadow:none; }
+  .btn-sm { padding:10px 24px; font-size:0.88rem; }
+
+  /* ── INTRO ── */
+  #intro { text-align:center; }
+  #intro .glyph { font-size:2rem; color:var(--gold); margin-bottom:6px; }
+  .lead { margin:20px auto 14px; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap { margin-bottom:28px; }
+  .progress-meta { display:flex; justify-content:space-between; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+  .progress-track { height:3px; background:rgba(197,160,95,0.15); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--olive),var(--gold)); transition:width 0.35s ease; }
+
+  /* ── QUESTION ── */
+  .q-text { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:1.65rem; color:var(--ivory); line-height:1.28; margin-bottom:26px; }
+  .answers { display:flex; flex-direction:column; gap:10px; }
+  .answer { font-family:'Nunito',sans-serif; font-weight:300; font-size:0.95rem; color:var(--ivory-soft); background:rgba(255,255,255,0.04); border:1px solid rgba(197,160,95,0.2); border-radius:14px; padding:14px 18px; cursor:pointer; text-align:left; transition:all 0.15s ease; line-height:1.55; }
+  .answer:hover { border-color:var(--gold); color:var(--ivory); background:rgba(197,160,95,0.09); transform:translateX(3px); }
+  .nav-back { margin-top:20px; text-align:center; }
+  .nav-back button { background:none; border:none; color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.85rem; cursor:pointer; opacity:0.65; }
+  .nav-back button:hover { opacity:1; color:var(--ivory); }
+
+  /* ── RESULT HEADER ── */
+  .result-label { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:3rem; text-align:center; line-height:1.04; margin-bottom:6px; background:linear-gradient(180deg,var(--gold-soft) 0%,var(--ivory) 70%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .result-tag { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.25rem; color:var(--gold-soft); text-align:center; margin-bottom:4px; }
+
+  /* ── SIDEBAR ── */
+  .result-layout { display:flex; gap:32px; align-items:flex-start; margin-top:30px; }
+  .result-side { flex:0 0 215px; position:sticky; top:24px; }
+  .result-nav { display:flex; flex-direction:column; gap:4px; }
+  .nav-label { font-family:'Nunito',sans-serif; letter-spacing:0.16em; text-transform:uppercase; font-size:0.66rem; color:var(--text-muted); margin:4px 0 8px 14px; }
+  .tap-hint { display:none; }
+  .nav-item { display:flex; align-items:center; gap:10px; width:100%; font-family:'Nunito',sans-serif; font-weight:400; font-size:0.94rem; color:var(--ivory-soft); background:transparent; border:none; border-left:3px solid transparent; border-radius:0 10px 10px 0; padding:12px 14px; cursor:pointer; text-align:left; transition:all 0.15s ease; }
+  .nav-item:hover { background:rgba(197,160,95,0.07); color:var(--ivory); }
+  .nav-item.active { background:rgba(197,160,95,0.13); color:var(--ivory); font-weight:600; border-left:3px solid var(--gold); }
+  .nav-item .nav-dot { color:var(--gold); font-size:0.8rem; margin-left:auto; opacity:0; transition:opacity 0.15s; }
+  .nav-item.active .nav-dot { opacity:1; }
+  .nav-card { margin-top:20px; max-width:165px; display:none; }
+  .nav-card.show { display:block; animation:fade 0.4s ease; }
+  .nav-card img { width:100%; display:block; border-radius:12px; box-shadow:0 0 28px rgba(197,160,95,0.22),0 10px 24px var(--shadow); }
+  .nav-card-mobile { display:none !important; }
+  .result-content { flex:1 1 auto; min-width:0; }
+
+  /* ── PANELS ── */
+  .panel { display:none; }
+  .panel.active { display:block; animation:fade 0.35s ease; }
+  .panel.light-panel.active { background:#f5f0e8; border:1px solid rgba(197,160,95,0.25); border-radius:16px; padding:32px 34px; box-shadow:0 14px 40px var(--shadow); }
+  .panel-head { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.7rem; color:#1e2e1a; margin-bottom:20px; }
+
+  /* Description */
+  #panelDescription.active { background:#f5f0e8; border:1px solid rgba(197,160,95,0.25); border-radius:16px; padding:32px 34px; box-shadow:0 14px 40px var(--shadow); }
+  .phase-img-wrap { margin:0 auto 26px; max-width:210px; }
+  .phase-img { width:100%; display:block; border-radius:14px; box-shadow:0 0 45px rgba(197,160,95,0.28),0 18px 40px var(--shadow); }
+  .img-fallback { width:100%; aspect-ratio:3/4; border-radius:14px; border:1px dashed rgba(197,160,95,0.4); background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; text-align:center; padding:20px; color:var(--text-muted); font-size:0.88rem; }
+  .reading p { margin-bottom:16px; font-weight:400; color:#2a3326; font-size:1.02rem; line-height:1.8; }
+  .reading p:last-child { margin-bottom:0; }
+  .reading p.solo { font-weight:700; color:#1e2e1a; font-style:italic; }
+
+  /* Meditation */
+  .med-wrap { text-align:center; }
+  .med-glyph { font-size:1.8rem; display:block; margin-bottom:14px; color:var(--gold); }
+  .med-title { font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:#1e2e1a; margin-bottom:10px; font-style:italic; line-height:1.35; }
+  .med-intro { font-size:0.95rem; color:#4a5e44; margin-bottom:22px; line-height:1.7; }
+  audio { width:100%; border-radius:999px; outline:none; margin-top:4px; }
+  .med-coming { font-size:0.92rem; color:#6a7e64; font-style:italic; padding:20px; background:rgba(61,90,50,0.08); border-radius:12px; border:1px dashed rgba(197,160,95,0.3); line-height:1.65; }
+
+  /* ── BREATHWORK PANEL ── */
+  #panelBreath.active {
+    background: rgba(20,32,14,0.75);
+    border:1px solid var(--gold-line);
+    border-radius:16px; padding:36px 34px;
+    box-shadow:0 14px 40px var(--shadow);
+    text-align:center;
+  }
+  .breath-name { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-style:italic; color:var(--gold-soft); margin-bottom:8px; }
+  .breath-desc { font-size:0.93rem; color:var(--text-muted); margin-bottom:30px; line-height:1.65; max-width:340px; margin-left:auto; margin-right:auto; }
+  .breath-circle-wrap { position:relative; width:180px; height:180px; margin:0 auto 28px; }
+  .breath-ring { position:absolute; inset:-20px; border-radius:50%; border:1.5px solid var(--gold); opacity:0.25; transform:scale(1); transition:transform 4s ease-in-out, opacity 4s ease-in-out; }
+  .breath-inner { position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle at center, rgba(197,160,95,0.18), rgba(42,61,31,0.6)); border:1.5px solid rgba(197,160,95,0.45); display:flex; align-items:center; justify-content:center; transform:scale(1); transition:transform 4s ease-in-out; }
+  .breath-label { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--ivory); line-height:1.3; padding:0 16px; }
+  .breath-btn { margin-bottom:16px; }
+  .breath-note { font-size:0.82rem; color:var(--text-muted); font-style:italic; line-height:1.5; }
+  .breath-pattern { display:flex; justify-content:center; gap:18px; margin-bottom:26px; }
+  .breath-phase-tag { text-align:center; }
+  .breath-phase-tag .bpt-num { font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--gold); line-height:1; }
+  .breath-phase-tag .bpt-label { font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-top:2px; }
+  .breath-sep { color:var(--gold-line); font-size:1.4rem; line-height:2.2; }
+
+  /* ── PRACTICE PANEL ── */
+  .practice-block { background:rgba(61,90,50,0.1); border:1px solid rgba(197,160,95,0.2); border-radius:14px; padding:22px 24px; margin-bottom:24px; }
+  .practice-block-label { font-family:'Nunito',sans-serif; letter-spacing:0.2em; text-transform:uppercase; font-size:0.68rem; color:#7a9e6a; font-weight:600; margin-bottom:10px; }
+  .practice-block p { color:#2a3326; font-size:1.01rem; line-height:1.8; margin:0; }
+  .prompts-list { display:flex; flex-direction:column; gap:14px; }
+  .prompt-item { border-left:3px solid var(--gold); padding:14px 16px; background:rgba(197,160,95,0.06); border-radius:0 10px 10px 0; }
+  .prompt-q { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:#2a3326; line-height:1.45; margin-bottom:8px; }
+  .prompt-ta { width:100%; border:1px solid rgba(61,90,50,0.25); border-radius:8px; padding:10px 12px; font-family:'Nunito',sans-serif; font-size:0.88rem; color:#2a3326; background:rgba(255,255,255,0.6); resize:vertical; min-height:60px; line-height:1.5; outline:none; transition:border-color 0.15s; }
+  .prompt-ta:focus { border-color:rgba(197,160,95,0.6); }
+  .prompt-ta::placeholder { color:#9aae94; font-style:italic; }
+
+  /* Next Steps */
+  .next-glyph { font-size:1.8rem; display:block; margin-bottom:14px; text-align:center; color:var(--gold); }
+  .next-body { font-size:1.01rem; color:#2a3326; line-height:1.8; margin-bottom:26px; }
+  .next-body p { margin-bottom:14px; }
+  .next-body p:last-child { margin-bottom:0; }
+  .next-cta-wrap { text-align:center; }
+  a.cta-link { display:inline-block; background:linear-gradient(135deg,var(--gold-soft),var(--gold)); color:var(--forest-deep); text-decoration:none; padding:15px 34px; border-radius:999px; font-family:'Nunito',sans-serif; font-size:0.96rem; font-weight:600; letter-spacing:0.03em; transition:all 0.2s ease; box-shadow:0 8px 22px rgba(197,160,95,0.28); }
+  a.cta-link:hover { transform:translateY(-2px); box-shadow:0 14px 30px rgba(197,160,95,0.42); }
+
+  .sig { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.08rem; color:var(--text-muted); margin-top:30px; text-align:center; }
+  .result-foot { text-align:center; margin-top:26px; }
+
+  .fade { animation:fade 0.45s ease; }
+  @keyframes fade { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .hidden { display:none !important; }
+
+  @media (max-width:680px) {
+    h1.display{font-size:2rem;} .result-label{font-size:2.3rem;} .q-text{font-size:1.38rem;}
+    .card{padding:32px 20px;} .card.result-card{padding:28px 16px;} body{padding:16px 10px 60px;}
+    .result-layout{flex-direction:column;gap:20px;margin-top:22px;}
+    .result-side{flex:1 1 auto;position:static;width:100%;}
+    .result-content{width:100%;}
+    .result-nav{flex-direction:row;flex-wrap:wrap;gap:7px;}
+    .nav-label{display:none;}
+    .tap-hint{display:block;width:100%;text-align:center;font-size:0.78rem;color:var(--gold-soft);font-style:italic;margin-bottom:4px;}
+    .nav-item{flex:1 1 calc(50% - 4px);justify-content:center;text-align:center;font-size:0.8rem;border-left:none;border:1px solid rgba(197,160,95,0.25);border-radius:30px;padding:10px 8px;}
+    .nav-item.active{border-left:none;border:1px solid var(--gold);background:rgba(197,160,95,0.15);}
+    .nav-item .nav-dot{display:none;}
+    .panel.light-panel.active,#panelDescription.active,#panelBreath.active{padding:22px 16px;}
+    #navCard{display:none !important;}
+    .nav-card-mobile{max-width:180px;margin:20px auto 0;}
+    .nav-card-mobile.show{display:block !important;animation:fade 0.4s ease;}
+    .breath-circle-wrap{width:150px;height:150px;}
+  }
+</style>
+</head>
+<body>
+<div class="bg" id="bgEl"></div>
+<div class="bg-overlay"></div>
+<div class="stage" id="stage">
+
+  <section id="intro" class="card fade">
+    <div class="glyph">✦</div>
+    <p class="eyebrow">Louise Cargo</p>
+    <div class="rule"></div>
+    <h1 class="display">The Becoming</h1>
+    <p class="sub lead">You already know something has shifted. This isn't about whether you recognise yourself right now — it's about where you actually are in finding your way back.</p>
+    <p class="sub" style="margin-top:14px;font-size:0.9rem;">Read each question and choose the answer that feels most true. Not the one you wish were true. The one that actually is.</p>
+    <br><br>
+    <button class="btn" id="startBtn">Begin</button>
+  </section>
+
+  <section id="quiz" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-meta"><span id="qCounter">Question 1 of 12</span>    <span>The Becoming</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div id="qText" class="q-text"></div>
+    <div id="answers" class="answers"></div>
+    <div class="nav-back"><button id="backBtn">← Back</button></div>
+  </section>
+
+  <section id="result" class="card result-card hidden">
+    <p class="eyebrow" id="rPhaseLabel"></p>
+    <div class="rule"></div>
+    <div class="result-label" id="rLabel"></div>
+    <div class="result-tag" id="rTag"></div>
+    <div class="result-layout">
+      <div class="result-side">
+        <nav class="result-nav">
+          <div class="nav-label">Explore your result</div>
+          <p class="tap-hint">Tap to explore</p>
+          <button class="nav-item active" data-panel="description">Your Phase <span class="nav-dot">✦</span></button>
+          <button class="nav-item" data-panel="meditation">Your Meditation <span class="nav-dot">✦</span></button>
+          <button class="nav-item" data-panel="breath">Breathwork <span class="nav-dot">✦</span></button>
+          <button class="nav-item" data-panel="practice">Your Practice <span class="nav-dot">✦</span></button>
+          <button class="nav-item" data-panel="nextsteps">Your Next Step <span class="nav-dot">✦</span></button>
+        </nav>
+        <div class="nav-card" id="navCard"></div>
+      </div>
+      <div class="result-content">
+        <div class="panel active"  id="panelDescription"></div>
+        <div class="panel light-panel" id="panelMeditation"></div>
+        <div class="panel" id="panelBreath"></div>
+        <div class="panel light-panel" id="panelPractice"></div>
+        <div class="panel light-panel" id="panelNextSteps"></div>
+        <div class="nav-card nav-card-mobile" id="navCardMobile"></div>
+      </div>
+    </div>
+    <p class="sig">You are not broken. You are becoming. — Louise ✦</p>
+    <div class="result-foot"><button class="btn btn-ghost" id="retakeBtn">Retake the quiz</button></div>
+  </section>
+
+</div>
+<script>
+(function(){
+'use strict';
+
+var BASE = window.location.href.split('?')[0].replace(/[^\/]*$/,'');
+document.getElementById('bgEl').style.backgroundImage = 'url('+BASE+'Images/background.jpg)';
+var BOOKING_LINK = 'https://louisecargo.com';
+
+var questions = [
+  {q:'When you think about how you feel day to day, which comes closest?',opts:['I\'m functioning but I feel like I\'m watching my life from a distance. Something is off but I can\'t put my finger on what.','I know what\'s shifted but sitting with that loss is almost unbearable some days. I\'m grieving something I never got to say goodbye to.','I\'m starting to feel like myself again in flashes. But I don\'t fully trust it yet.','I feel more like myself than I have in years. Not the old me — something clearer than that.']},
+  {q:'When someone asks how you are, you:',opts:['Say you\'re fine because explaining what\'s actually happening feels impossible — you don\'t even have the words for it yet.','Could cry if they asked properly. There\'s so much underneath the surface that you\'re holding together.','Give an honest answer more often than you used to. You\'re learning to say what\'s actually true.','Mean it when you say you\'re good. Not perfect — but genuinely, actually okay.']},
+  {q:'The thing that keeps you up at night is:',opts:['A low hum of anxiety you can\'t trace back to anything specific. Just a feeling that something is wrong.','The life you thought you\'d have by now. The version of yourself you were supposed to be.','Whether the clarity you\'ve been feeling is real or whether it will disappear again.','What comes next. Not from fear — from genuine curiosity about who you\'re becoming.']},
+  {q:'When you look in the mirror, you:',opts:['Don\'t quite recognise the person looking back. It\'s not just physical — something deeper has shifted.','See someone who has been through something real. And you\'re still not sure you\'re ready for what that means.','Are starting to make peace with what you see. Some days more than others.','See someone who has come through something and is still standing. That means something to you now.']},
+  {q:'Your relationship with your own needs right now:',opts:['What needs? You\'re so busy trying to feel normal that your own needs barely register.','You know what you need. You\'re just not sure you\'re allowed to want it — or whether it\'s too late.','You\'re learning to listen to yourself again. It feels unfamiliar but not wrong.','You\'re getting better at putting yourself in the picture. It\'s still a practice but it\'s becoming yours.']},
+  {q:'When you think about the future, you feel:',opts:['Foggy. You can\'t see clearly enough to imagine what comes next.','Sad, mostly. Like something closed before you got to finish it.','Cautiously hopeful. Like something is starting to open up, even if you can\'t name it yet.','Ready. Not fearless — but ready.']},
+  {q:'The personal development work you\'ve done before:',opts:['Hasn\'t touched what\'s happening right now. You\'re not even sure what the problem is yet.','Helped before but isn\'t reaching this particular grief. This season feels different.','Is starting to make sense in a new way. Like the pieces are rearranging themselves.','Feels like it was preparation for exactly this moment.']},
+  {q:'The word that best describes where you are right now:',opts:['Lost','Grieving','Tentative','Emerging']},
+  {q:'What you most need someone to say to you right now:',opts:['"What you\'re experiencing is real. There\'s a reason you feel this way."','"You\'re allowed to grieve this. You don\'t have to hold it together."','"You can trust what you\'re finding inside yourself. It\'s real."','"You\'re ready for this next chapter. You\'ve already done the hard part."']},
+  {q:'Your sense of identity right now:',opts:['Feels like it\'s dissolved. You\'re not sure who you are outside of the roles you play.','Feels like something you\'re mourning. You knew who you were — and that person feels out of reach.','Is starting to reform. It\'s unfamiliar but it feels more honest than before.','Feels chosen for the first time. Not inherited or expected — actually chosen.']},
+  {q:'If you had to describe this season of your life in one sentence:',opts:['"I don\'t recognise myself and I don\'t know how to find my way back."','"I know what I\'ve lost and I\'m not sure I\'m ready to let it go."','"I\'m finding my way back to myself — slowly, but I can feel it."','"I\'m becoming someone I actually chose to be."']},
+  {q:'What brought you here today:',opts:['Something had to change. I just don\'t know what yet.','I need to stop carrying this alone.','I\'m ready to trust this process properly.','I want support for the next step — not because I\'m lost, but because I want to do this well.']}
+];
+
+var results = {
+  a:{
+    phaseLabel:'Phase 1', label:'DISCOVER', tagline:'You\'re in the fog — and the fog is real.',
+    image:'Images/discover.jpg', audio:'discover.mp3', audioTitle:'A meditation for when you\'re in the fog',
+    paras:[
+      {t:'Something has shifted and you know it. You just can\'t name it yet — and that\'s one of the most disorienting places a woman can be. You\'re functioning. You\'re showing up. But there\'s a distance between you and your own life that you can\'t quite close, and you\'re starting to wonder if this is just who you are now.'},
+      {t:'It isn\'t.',solo:true},
+      {t:'What\'s happening to you has a name. It has a reason. And the fact that you can\'t think or push or optimise your way out of it isn\'t a failure — it\'s information. This particular season doesn\'t respond to the tools that worked before. It needs something different.'},
+      {t:'The first phase of Your Becoming is Discover — and it begins with exactly where you are right now. Not with fixing. Not with reframing. With understanding what has actually happened to your sense of self, and why. That understanding is the beginning of everything.'},
+      {t:'You\'re not broken. You\'re at the beginning.',solo:true}
+    ],
+    cta:'The Finding Yourself Journey starts here — with making sense of what\'s happening before we try to change anything.',
+    breath:{pattern:[4,4,6],name:'Grounding breath',desc:'Slow and steadying. For when you need to feel the ground beneath you, even when you can\'t see clearly.'},
+    practice:'Sit somewhere quiet and set a timer for five minutes. Don\'t try to fix anything or name what\'s wrong. Just let yourself be here — in this room, in this body, in this moment. Notice your breath. Notice your hands. Notice the sounds around you. That\'s all. You don\'t have to understand this season yet. You just have to be in it.',
+    prompts:['What feels most off right now, even if you can\'t put words to it?','If your body could speak, what would it say?','What have you been pretending is fine?']
+  },
+  b:{
+    phaseLabel:'Phase 2', label:'RELEASE', tagline:'You know what you\'ve lost. Now comes the part no one talks about.',
+    image:'Images/release.jpg', audio:'release.mp3', audioTitle:'A meditation for grief and letting go',
+    paras:[
+      {t:'You\'re past the fog. You understand, at least in part, what\'s shifted and why. But knowing hasn\'t made it easier — if anything, it\'s made it more real. Because now you\'re sitting with the grief of it. The version of yourself you thought you\'d be. The life you thought you\'d have by now. The things you never got to say goodbye to.'},
+      {t:'This is Release — and it\'s the phase most women want to skip. It\'s uncomfortable and it\'s slow and it doesn\'t look like progress from the outside. But it is the work. Because you cannot move forward while you\'re still holding tightly to what you thought your life was going to be.'},
+      {t:'You don\'t have to let go of everything. But you do have to put some things down. And you don\'t have to do that alone.'},
+      {t:'You\'re not stuck. You\'re in the part that takes courage.',solo:true}
+    ],
+    cta:'This is exactly the work the Finding Yourself Journey was built for.',
+    breath:{pattern:[4,2,7],name:'Release breath',desc:'A longer exhale. For letting what you\'ve been holding begin, very gently, to soften.'},
+    practice:'Get a piece of paper and write down what you\'re grieving. Not what you\'re grateful for — what you\'ve lost, or what you miss, or what you wish had gone differently. Let it be honest and unglamorous. Then fold the paper and put it somewhere. You don\'t have to throw it away. Just give it somewhere to live that isn\'t inside your chest.',
+    prompts:['What version of your life are you grieving right now?','What do you wish someone had told you before this season began?','What would you say to her — the version of you who didn\'t know this was coming?']
+  },
+  c:{
+    phaseLabel:'Phase 3', label:'RECLAIM', tagline:'You can feel yourself coming back. Trust that.',
+    image:'Images/reclaim.jpg', audio:'reclaim.mp3', audioTitle:'A meditation for learning to trust yourself again',
+    paras:[
+      {t:'Something has shifted again — quietly, maybe tentatively, but it\'s real. You\'re starting to hear your own voice again. Starting to know what you actually want rather than what you\'re supposed to want. Starting to make choices that feel like yours.'},
+      {t:'But you don\'t fully trust it yet. Part of you is waiting for the fog to come back. Part of you wonders if this clarity is permanent or just a good week. That doubt is normal — and it doesn\'t mean you\'re not ready. It means you\'re in Reclaim.'},
+      {t:'This phase is about learning to trust what\'s already inside you. Not performing confidence. Not convincing yourself. Actually listening to what you know — and letting that be enough.'},
+      {t:'You\'ve done the hard internal work to get here. The next step is learning to stand in it.'},
+      {t:'You\'re not almost there. You\'re already in it.',solo:true}
+    ],
+    cta:'The Finding Yourself Journey meets you exactly here — with tools to help you trust what you\'re finding and build on it.',
+    breath:{pattern:[4,4,4],name:'Returning breath',desc:'Equal and balanced. For practising the steady return to yourself, breath by breath.'},
+    practice:'Think of one thing that has always felt like you — a song, a place, a way of spending an hour, something that makes you feel most like yourself. Do that thing today. Not because you have to. Because she — the you who is coming back — deserves to be welcomed home.',
+    prompts:['When did you last feel most like yourself? What were you doing?','What does your gut say, before your head gets involved?','What would you choose for yourself if no one else\'s needs were in the picture?']
+  },
+  d:{
+    phaseLabel:'Phase 4', label:'BECOME', tagline:'You know who you\'re becoming. Now claim her fully.',
+    image:'Images/become.jpg', audio:'become.mp3', audioTitle:'A meditation for stepping into who you\'re becoming',
+    paras:[
+      {t:'You\'ve come through something real. The fog, the grief, the slow work of finding your way back to yourself — you\'ve done it, or you\'re doing it, and it shows. You feel more like yourself than you have in years. Not the self you were before — something clearer. Something chosen.'},
+      {t:'You\'re in Become — the phase where the woman you\'ve been finding becomes the woman you\'re living as. This isn\'t the end of the journey. It\'s the beginning of the chapter where you stop recovering and start creating.'},
+      {t:'Some women in this phase think they don\'t need support because they\'re no longer in crisis. But this is actually one of the most powerful times to work with someone — when you\'re clear enough to build intentionally rather than just survive.'},
+      {t:'You\'re not almost yourself. You are her. Own it.',solo:true}
+    ],
+    cta:'If you want support to build this chapter with intention — not from fear, but from clarity — book a conversation with Louise.',
+    breath:{pattern:[5,1,5],name:'Becoming breath',desc:'Full and expansive. For the woman who is ready to take up the space that was always hers.'},
+    practice:'Write one sentence that begins: "She is..." and describes the woman you\'re becoming. Not who you were. Not who you think you should be. The woman you can feel yourself becoming right now. Read it out loud. Let it land in your body as truth, not aspiration.',
+    prompts:['Who is she — the woman you\'re becoming? Describe her.','What does she do differently than the version of you who started this journey?','What is she ready to say yes to that you\'ve been quietly holding back from?']
+  },
+  tie:{
+    phaseLabel:'Between Phases', label:'IN TRANSITION', tagline:'You\'re not in one place — and that\'s exactly right.',
+    image:'Images/transition.jpg', audio:'transition.mp3', audioTitle:'A meditation for being in motion',
+    paras:[
+      {t:'If your answers landed across more than one phase, that\'s not a sign the quiz didn\'t work. It\'s a sign you\'re in transition — which is one of the most common and most uncomfortable places to be. You might have one foot in the fog and one foot in the grief. Or you might be moving between Reclaim and Become, clear some days and uncertain others.'},
+      {t:'Transition isn\'t a problem to solve. It\'s the actual texture of this journey. It\'s not linear and it doesn\'t follow a timetable.'},
+      {t:'What matters is that you\'re in it — and you showed up today to understand it better. That\'s not nothing. That\'s the beginning.'},
+      {t:'You\'re not behind. You\'re in motion.',solo:true}
+    ],
+    cta:'A conversation with Louise will help you work out exactly where you are and what you need next.',
+    breath:{pattern:[4,2,4],name:'Steadying breath',desc:'Simple and gentle. For finding your footing when you\'re between places and the ground feels uncertain.'},
+    practice:'Take a piece of paper and draw a simple horizontal line. At the left end, write the phase that feels most behind you. At the right, write the one that feels most ahead. Then place a mark where you are right now. Look at it. You\'re not stuck at either end — you\'re in the movement between. That\'s not a flaw. That\'s the journey.',
+    prompts:['What feels like it\'s behind you, even if only slightly?','What feels like it\'s starting to become possible, even if you can\'t fully claim it yet?','What\'s one small thing that would feel like progress right now?']
+  }
+};
+
+/* ── STATE ── */
+var state = {current:0, answers:[]};
+var breathTimers = [], breathRunning = false;
+
+/* ── ELEMENTS ── */
+var elStage=document.getElementById('stage'), elIntro=document.getElementById('intro'), elQuiz=document.getElementById('quiz'), elResult=document.getElementById('result');
+var elQCounter=document.getElementById('qCounter'), elFill=document.getElementById('progressFill'), elQText=document.getElementById('qText'), elAnswers=document.getElementById('answers'), elBack=document.getElementById('backBtn');
+var elRPhase=document.getElementById('rPhaseLabel'), elRLabel=document.getElementById('rLabel'), elRTag=document.getElementById('rTag');
+var elDesc=document.getElementById('panelDescription'), elMed=document.getElementById('panelMeditation'), elBreath=document.getElementById('panelBreath'), elPractice=document.getElementById('panelPractice'), elNext=document.getElementById('panelNextSteps');
+var elNavCard=document.getElementById('navCard'), elNavMob=document.getElementById('navCardMobile');
+var navItems=document.querySelectorAll('.result-nav .nav-item');
+
+/* ── HELPERS ── */
+function show(sec,wide){[elIntro,elQuiz,elResult].forEach(function(s){s.classList.add('hidden');}); sec.classList.remove('hidden'); sec.classList.remove('fade'); void sec.offsetWidth; sec.classList.add('fade'); elStage.classList.toggle('wide',!!wide); window.scrollTo(0,0);}
+function computeResult(){var c=[0,0,0,0]; state.answers.forEach(function(i){c[i]++;}); var max=Math.max.apply(null,c); var w=['a','b','c','d'].filter(function(_,i){return c[i]===max;}); return w.length===1?w[0]:'tie';}
+function makeImg(src,alt){var img=document.createElement('img'); img.src=BASE+src; img.alt=alt; img.addEventListener('error',function(){var fb=document.createElement('div'); fb.className='img-fallback'; fb.textContent=alt; if(img.parentNode) img.parentNode.replaceChild(fb,img);}); return img;}
+function el(tag,cls,txt){var e=document.createElement(tag); if(cls) e.className=cls; if(txt) e.textContent=txt; return e;}
+function clr(node){while(node.firstChild) node.removeChild(node.firstChild);}
+
+/* ── BREATHWORK ── */
+function stopBreath(){breathRunning=false; breathTimers.forEach(clearTimeout); breathTimers=[];}
+
+function startBreath(r){
+  var p=r.breath.pattern;
+  var circle=document.getElementById('breathInner'), ring=document.getElementById('breathRing'), label=document.getElementById('breathLabel'), btn=document.getElementById('breathBtn');
+  if(!circle) return;
+  if(breathRunning){stopBreath(); label.textContent='Press begin'; circle.style.transition='none'; circle.style.transform='scale(1)'; ring.style.transition='none'; ring.style.transform='scale(1)'; ring.style.opacity='0.25'; btn.textContent='Begin'; return;}
+  breathRunning=true; btn.textContent='Pause';
+  var phases=[];
+  phases.push({text:'Breathe in...',dur:p[0],big:true});
+  if(p[1]>0) phases.push({text:'Hold...',dur:p[1],big:true});
+  phases.push({text:'Breathe out...',dur:p[2],big:false});
+  function runPhase(i){
+    if(!breathRunning) return;
+    var ph=phases[i%phases.length];
+    label.textContent=ph.text;
+    circle.style.transition='transform '+ph.dur+'s ease-in-out';
+    ring.style.transition='transform '+ph.dur+'s ease-in-out, opacity '+ph.dur+'s ease-in-out';
+    if(ph.big){circle.style.transform='scale(1.3)'; ring.style.transform='scale(1.55)'; ring.style.opacity='0.6';}
+    else{circle.style.transform='scale(1)'; ring.style.transform='scale(1)'; ring.style.opacity='0.25';}
+    var t=setTimeout(function(){runPhase(i+1);},ph.dur*1000);
+    breathTimers.push(t);
+  }
+  circle.style.transition='none'; circle.style.transform='scale(1)'; ring.style.transition='none'; ring.style.transform='scale(1)'; ring.style.opacity='0.25';
+  setTimeout(function(){runPhase(0);},80);
+}
+
+/* ── PANELS ── */
+function setPanel(which){
+  var panels={description:elDesc,meditation:elMed,breath:elBreath,practice:elPractice,nextsteps:elNext};
+  Object.keys(panels).forEach(function(k){panels[k].classList.remove('active');});
+  if(panels[which]) panels[which].classList.add('active');
+  navItems.forEach(function(item){item.classList.toggle('active',item.getAttribute('data-panel')===which);});
+  var showCard=(which!=='description');
+  elNavCard.classList.toggle('show',showCard); elNavMob.classList.toggle('show',showCard);
+  if(which!=='breath') stopBreath();
+}
+
+/* ── RENDER RESULT ── */
+function renderResult(){
+  var key=computeResult(), r=results[key];
+  elRPhase.textContent=r.phaseLabel; elRLabel.textContent=r.label; elRTag.textContent=r.tagline;
+
+  /* Sidebar card */
+  [elNavCard,elNavMob].forEach(function(c){clr(c); c.appendChild(makeImg(r.image,r.label));});
+
+  /* ── Description panel ── */
+  clr(elDesc);
+  var iw=el('div','phase-img-wrap'); var bi=makeImg(r.image,r.label); bi.className='phase-img'; iw.appendChild(bi); elDesc.appendChild(iw);
+  var rd=el('div','reading'); r.paras.forEach(function(para){var p=el('p',para.solo?'solo':null,para.t); rd.appendChild(p);}); elDesc.appendChild(rd);
+
+  /* ── Meditation panel ── */
+  clr(elMed);
+  elMed.appendChild(el('div','panel-head','Your Meditation'));
+  var mw=el('div','med-wrap');
+  mw.appendChild(el('span','med-glyph','✦'));
+  mw.appendChild(el('div','med-title',r.audioTitle));
+  mw.appendChild(el('p','med-intro','This meditation was recorded specifically for where you are right now. Find somewhere still, close your eyes, and let yourself be held for a few minutes.'));
+  if(r.audio){var au=document.createElement('audio'); au.controls=true; au.src=BASE+r.audio; mw.appendChild(au);}
+  else{mw.appendChild(el('p','med-coming','Your personalised meditation will appear here once recorded by Louise. Come back soon.'));}
+  elMed.appendChild(mw);
+
+  /* ── Breathwork panel ── */
+  clr(elBreath);
+  elBreath.appendChild(el('div','breath-name',r.breath.name));
+  elBreath.appendChild(el('div','breath-desc',r.breath.desc));
+  // pattern display
+  var bp=el('div','breath-pattern');
+  var labels=['Inhale','Hold','Exhale']; var pat=r.breath.pattern;
+  var show3=pat[1]>0;
+  var patItems=show3?[{n:pat[0],l:'Inhale'},{n:pat[1],l:'Hold'},{n:pat[2],l:'Exhale'}]:[{n:pat[0],l:'Inhale'},{n:pat[2],l:'Exhale'}];
+  patItems.forEach(function(item,i){
+    if(i>0){var s=el('span','breath-sep','·'); bp.appendChild(s);}
+    var tag=el('div','breath-phase-tag');
+    tag.appendChild(el('div','bpt-num',item.n));
+    tag.appendChild(el('div','bpt-label',item.l));
+    bp.appendChild(tag);
+  });
+  elBreath.appendChild(bp);
+  // circle
+  var cw=el('div','breath-circle-wrap');
+  var ring=el('div','breath-ring'); ring.id='breathRing'; cw.appendChild(ring);
+  var inner=el('div','breath-inner'); inner.id='breathInner';
+  var lbl=el('span','breath-label','Press begin'); lbl.id='breathLabel'; inner.appendChild(lbl);
+  cw.appendChild(inner); elBreath.appendChild(cw);
+  // button
+  var bBtn=document.createElement('button'); bBtn.className='btn btn-sm breath-btn'; bBtn.id='breathBtn'; bBtn.textContent='Begin';
+  bBtn.addEventListener('click',function(){startBreath(r);}); elBreath.appendChild(bBtn);
+  elBreath.appendChild(el('p','breath-note','Breathe at your own pace. The circle is a guide, not a rule.'));
+
+  /* ── Practice panel ── */
+  clr(elPractice);
+  elPractice.appendChild(el('div','panel-head','Your Practice'));
+  var pb=el('div','practice-block');
+  pb.appendChild(el('div','practice-block-label','Today'));
+  pb.appendChild(el('p',null,r.practice));
+  elPractice.appendChild(pb);
+  var psec=el('div');
+  psec.appendChild(el('div','practice-block-label','Sit with this'));
+  var pl=el('div','prompts-list');
+  r.prompts.forEach(function(prompt){
+    var item=el('div','prompt-item');
+    item.appendChild(el('div','prompt-q',prompt));
+    var ta=document.createElement('textarea'); ta.className='prompt-ta'; ta.placeholder='Write here if you\'d like...'; ta.rows=3;
+    item.appendChild(ta); pl.appendChild(item);
+  });
+  psec.appendChild(pl); elPractice.appendChild(psec);
+
+  /* ── Next Steps panel ── */
+  clr(elNext);
+  elNext.appendChild(el('div','panel-head','Your Next Step'));
+  elNext.appendChild(el('span','next-glyph','✦'));
+  var nb=el('div','next-body');
+  var np=el('p',null,r.cta); nb.appendChild(np);
+  var np2=el('p',null,'A conversation is free, low-pressure, and simply a chance to work out whether the Finding Yourself Journey is the right next step for where you are. You\'ve already done the most important thing — you showed up and looked honestly at where you are. The rest can follow from there.');
+  nb.appendChild(np2); elNext.appendChild(nb);
+  var nc=el('div','next-cta-wrap');
+  var lk=document.createElement('a'); lk.className='cta-link'; lk.href=BOOKING_LINK; lk.target='_blank'; lk.rel='noopener'; lk.textContent='Book a conversation with Louise'; nc.appendChild(lk); elNext.appendChild(nc);
+
+  setPanel('description');
+}
+
+function renderQuestion(){
+  var qi=state.current, q=questions[qi];
+  elQCounter.textContent='Question '+(qi+1)+' of '+questions.length;
+  elFill.style.width=(qi/questions.length*100)+'%';
+  elQText.textContent=q.q; clr(elAnswers);
+  q.opts.forEach(function(opt,i){
+    var btn=document.createElement('button'); btn.className='answer'; btn.textContent=opt;
+    btn.addEventListener('click',function(){
+      state.answers[qi]=i;
+      if(qi+1<questions.length){state.current++;renderQuestion();}
+      else{renderResult();show(elResult,true);}
+    });
+    elAnswers.appendChild(btn);
+  });
+  elBack.style.visibility=qi===0?'hidden':'visible';
+}
+
+/* ── EVENTS ── */
+document.getElementById('startBtn').addEventListener('click',function(){state.current=0;state.answers=[];show(elQuiz,false);renderQuestion();});
+elBack.addEventListener('click',function(){if(state.current>0){state.current--;renderQuestion();}});
+navItems.forEach(function(item){item.addEventListener('click',function(){setPanel(item.getAttribute('data-panel'));window.scrollTo({top:0,behavior:'smooth'});});});
+document.getElementById('retakeBtn').addEventListener('click',function(){stopBreath();state.current=0;state.answers=[];show(elIntro,false);});
+
+})();
+</script>
+</body>
+</html>
